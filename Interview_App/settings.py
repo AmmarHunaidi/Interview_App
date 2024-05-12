@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-vx3mi0q5mgl#mqt14g!l$t(4@3_r7#le)agwv!a1_v(b^*tvqq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
+    'Interview_App',
+    "debug_toolbar",
+    'rest_auth',
 ]
 
 MIDDLEWARE = [
@@ -47,8 +52,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'Interview_App.middleware.ExceptionMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
+        # ...
+    }
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 ROOT_URLCONF = 'Interview_App.urls'
 
 TEMPLATES = [
@@ -76,7 +95,7 @@ WSGI_APPLICATION = 'Interview_App.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "interview_DB",
+        "NAME": "Interviewapp_DB",
         "USER": "postgres",
         "PASSWORD": "",
         "HOST": "localhost",
@@ -115,7 +134,11 @@ USE_I18N = True
 
 USE_TZ = True
 
+CORS_ALLOW_ALL_ORIGINS = True
 
+AUTH_USER_MODEL = 'Interview_App.User'
+
+APPEMD_SLASH = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -125,3 +148,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
